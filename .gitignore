@@ -1,0 +1,7 @@
+devcheck_log*.txt
+devrepair_log*.txt
+devdc_*.mat
+test_log*.txt
+dev-notes/
+.DS_Store
+*.asv

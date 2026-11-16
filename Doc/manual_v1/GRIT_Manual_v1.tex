@@ -1,0 +1,1235 @@
+% GRIT Version 1.0.0 User Manual
+% Compile with XeLaTeX
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\setsansfont{TeX Gyre Heros}
+\setmonofont{DejaVu Sans Mono}[Scale=0.85]
+
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.8cm,bottom=2.8cm}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{graphicx}
+\graphicspath{{figures/}{./}}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc,decorations.pathreplacing}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!70!black,citecolor=green!50!black,urlcolor=blue!60!black}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\tcbuselibrary{listings,skins,breakable}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{fancyvrb}
+\usepackage{tocloft}
+\usepackage{tabularx}
+\usepackage[normalem]{ulem}
+
+% ===== Style settings =====
+\definecolor{codeblue}{RGB}{0,80,160}
+\definecolor{codegray}{RGB}{100,100,100}
+\definecolor{codegreen}{RGB}{0,120,60}
+\definecolor{codebg}{RGB}{248,248,248}
+\definecolor{grim-blue}{RGB}{25,65,120}
+\definecolor{grim-red}{RGB}{180,40,40}
+\definecolor{step-green}{RGB}{40,130,60}
+\definecolor{warn-orange}{RGB}{200,120,0}
+\definecolor{grim-teal}{RGB}{0,139,165}
+
+\lstset{
+  basicstyle=\small\ttfamily,
+  backgroundcolor=\color{codebg},
+  keywordstyle=\color{codeblue}\bfseries,
+  commentstyle=\color{codegreen}\itshape,
+  stringstyle=\color{grim-red},
+  numbers=left,
+  numberstyle=\tiny\color{codegray},
+  frame=single,
+  rulecolor=\color{codegray!40},
+  breaklines=true,
+  tabsize=4,
+  language=Matlab,
+  showstringspaces=false,
+  xleftmargin=2em,
+  framexleftmargin=1.5em,
+}
+
+\newtcolorbox{notebox}[1][]{
+  colback=blue!5!white, colframe=grim-blue!70!black,
+  fonttitle=\bfseries, title={Note}, #1
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=red!5!white, colframe=grim-red!80!black,
+  fonttitle=\bfseries, title={Warning}, #1
+}
+\newtcolorbox{tipbox}[1][]{
+  colback=green!5!white, colframe=step-green!80!black,
+  fonttitle=\bfseries, title={Tip}, #1
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textsf{GRIT\textsuperscript{TM} Version 1.0.0 User Manual}}
+\fancyhead[R]{\small\textsf{\thepage}}
+\fancyfoot[C]{\small\textsf{Copyright \copyright{} 2026 Francis Yunhe Hou}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\titleformat{\part}[display]
+  {\clearpage\thispagestyle{empty}\vbox to \textheight\bgroup\vfil\centering\sffamily\color{grim-blue}}
+  {\Large\MakeUppercase{Part \thepart}}
+  {1.5em}
+  {\Huge\bfseries}
+  [\vfil\egroup\clearpage]
+\titleformat{\section}{\Large\bfseries\sffamily\color{grim-blue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\sffamily\color{grim-blue!80!black}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\sffamily}{\thesubsubsection}{1em}{}
+
+% ===== Custom commands =====
+\newcommand{\menu}[1]{\texttt{\textbf{#1}}}
+\newcommand{\btn}[1]{\fcolorbox{gray!60}{gray!10}{\small\textsf{#1}}}
+\newcommand{\fname}[1]{\texttt{#1}}
+\newcommand{\fpath}[1]{\texttt{\small #1}}
+\newcommand{\TM}{\textsuperscript{TM}}
+\newcommand{\GRIM}{GRIM\TM}
+\newcommand{\GRIT}{GRIT\TM}
+\newcommand{\opt}[1]{\texttt{#1}}
+\newcommand{\shot}[3][0.97]{\begin{figure}[H]\centering\includegraphics[width=#1\textwidth]{#2}\caption{#3}\end{figure}}
+\newcommand{\GriRes}{GriRes\TM}
+
+% ===== Document begins =====
+\begin{document}
+\emergencystretch=3em
+
+% ===== Cover page =====
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north] at ([yshift=-0.5cm]current page.north)
+    {\includegraphics[width=2.2cm]{grires_logo.png}};
+  \fill[grim-blue] ([yshift=-3.5cm]current page.north west) rectangle ([yshift=-14.5cm]current page.north east);
+  \fill[warn-orange] ([yshift=-14.5cm]current page.north west) rectangle ([yshift=-14.85cm]current page.north east);
+  \fill[white,opacity=0.04] ([xshift=-2cm,yshift=-5.5cm]current page.north east) circle (6cm);
+  \fill[white,opacity=0.03] ([xshift=3cm,yshift=-12.5cm]current page.north west) circle (4cm);
+  \node[anchor=west, white] at ([xshift=2.5cm,yshift=-7.2cm]current page.north west)
+    {\fontsize{56}{62}\selectfont\bfseries\sffamily GRIT\raisebox{0.75em}{\fontsize{14}{16}\selectfont\textsuperscript{TM}}};
+  \node[anchor=west, white] at ([xshift=2.5cm,yshift=-9.2cm]current page.north west)
+    {\LARGE\sffamily Grid Realizability Inspection Tool};
+  \node[anchor=west, white] at ([xshift=2.5cm,yshift=-10.0cm]current page.north west)
+    {\large\sffamily AC Feasibility Check and Repair of DC Dispatch};
+  \node[anchor=west, white!80] at ([xshift=2.5cm,yshift=-11.0cm]current page.north west)
+    {\large\sffamily A Tool of the GriRes\textsuperscript{TM} Suite};
+  \node[anchor=west, white!60] at ([xshift=2.5cm,yshift=-11.7cm]current page.north west)
+    {\normalsize\sffamily Grid Resilience Suite};
+  \draw[black!30, line width=0.4pt] ([yshift=3.8cm,xshift=-2cm]current page.south) -- ([yshift=3.8cm,xshift=2cm]current page.south);
+  \node[anchor=south] at ([yshift=2.8cm]current page.south)
+    {\small\sffamily\color{black!50} Free and open-source under GPL-3.0-or-later};
+  \node[anchor=south] at ([yshift=2.2cm]current page.south)
+    {\small\sffamily\color{black!50} Commercial license available for proprietary use};
+\end{tikzpicture}
+
+\vspace*{13cm}
+
+{\fontsize{30}{36}\selectfont\bfseries\sffamily\color{grim-blue} User Manual}
+
+\vspace{0.8cm}
+
+{\Large\sffamily Version 1.0.0 \hspace{0.5cm}|\hspace{0.5cm} 2026}
+
+\vspace{0.4cm}
+
+{\small\sffamily\color{black!50} For GRIT Version 1.0.0}
+
+\vspace{1.5cm}
+
+\begin{center}
+{\Large\bfseries\sffamily Dr.\ Francis Yunhe Hou}\\[0.2cm]
+{\small\sffamily \url{fyhou@vt.edu} \hspace{0.3cm}|\hspace{0.3cm} \url{yunhe.hou@gmail.com}}\\[0.1cm]
+{\small\sffamily \url{https://ece.vt.edu/people/profile/francis-hou.html}}\\[0.1cm]
+{\small\sffamily \url{https://francisyhou.github.io}}\\[0.1cm]
+{\small\sffamily \url{https://github.com/GriRes/GRIT}}
+\end{center}
+
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ====================================================================
+\section*{Preface}
+\addcontentsline{toc}{section}{Preface}
+% ====================================================================
+
+\begingroup
+\large
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1.2em}
+
+Dispatch decisions in power systems are computed with the DC model. Market clearing, unit commitment and most restoration studies use it because it is linear and fast. The DC model has no voltage magnitudes, no reactive power and no losses. A dispatch that satisfies every DC constraint can therefore violate voltage limits, overload branches or have no power flow solution at all in the AC network.
+
+\GRIT{} answers one practical question. Given a DC dispatch, can the AC network carry it within its operating limits, and if not, which nearby dispatch can? The tool is built so that a check costs a small fraction of one AC optimal power flow. A user who needs the optimal AC dispatch should run an AC-OPF. A user who has a DC dispatch and needs to know whether it is realizable, where it fails and how far it is from a realizable one, uses \GRIT.
+
+\GRIT{} is the second public tool of the GriRes\TM{} Suite, after \GRIM{}. Both tools share the same interface conventions and the same engineering practice: every result is verified against an independent computation, and every limitation is stated in the manual.
+
+This manual has four parts. Part~I explains how to install and operate the tool. Part~II states the algorithms in full. Part~III works through examples with their numbers. Part~IV holds the reference tables.
+
+\endgroup
+
+% ====================================================================
+\part{Operations}\label{part:operations}
+% ====================================================================
+
+\clearpage
+\section{The GriRes\texorpdfstring{\TM}{(TM)} Suite}\label{sec:grires}
+
+\textbf{GriRes\TM} (Grid Resilience Suite) is a set of software tools for power system resilience analysis, planning and restoration. It is developed by Dr.\ Francis Yunhe Hou. Each tool addresses one task. The tools share data formats (MATPOWER cases), interface conventions and documentation style.
+
+\begin{itemize}[nosep]
+  \item \textbf{\GRIM} (Generic Restoration Intelligent Milestone) computes restoration strategies after a blackout.
+  \item \textbf{\GRIT} (Grid Realizability Inspection Tool) checks whether a DC dispatch is realizable in the AC network, and repairs it when it is not.
+\end{itemize}
+
+The two tools meet in practice. A restoration plan or a market dispatch computed with a linear model is a candidate. \GRIT{} tests the candidate against the AC network before it is used.
+
+GRIM\TM, GRIT\TM{} and GriRes\TM{} are trademarks of Francis Yunhe Hou.
+
+% ====================================================================
+\section{Overview}\label{sec:overview}
+
+\subsection{The physical problem}\label{sec:physics}
+
+A transmission network carries active and reactive power at the same time. Four physical facts follow from the AC power flow equations.
+
+\begin{enumerate}[nosep]
+  \item \textbf{Losses.} The series resistance of every branch dissipates active power. The generators must produce the load plus the losses.
+  \item \textbf{Voltage drop.} Active and reactive flows change the voltage magnitude along a branch. A load bus far from voltage support can fall below its lower limit.
+  \item \textbf{Reactive flow.} A branch carries reactive power in addition to active power. Its thermal limit applies to the apparent power (MVA), which is larger than the active power alone.
+  \item \textbf{Reactive capability.} A generator holds its terminal voltage only while its reactive output stays within its limits. At a limit the voltage is no longer held.
+\end{enumerate}
+
+The DC model keeps none of these four. It assumes that every voltage magnitude is 1~pu, that branches have no resistance, and that reactive power does not exist. A DC dispatch therefore satisfies the active power balance without losses and the branch limits in MW only.
+
+\begin{notebox}[title={What ``violation'' means in this manual}]
+A \emph{violation} is an operating quantity of the AC solution that lies outside its allowed range: a bus voltage below \texttt{VMIN} or above \texttt{VMAX}, a branch loading above its rating, or a generator output outside its reactive or active limits. A violation is a finding about the dispatch. It is not an error of the tool.
+\end{notebox}
+
+\subsection{What a run does}\label{sec:whatrun}
+
+One run of \GRIT{} has six steps. Each step ties to one of the physical facts above.
+
+\begin{enumerate}[nosep]
+  \item \textbf{DC dispatch.} \GRIT{} runs the DC-OPF of MATPOWER, or takes the active power values stored in the case.
+  \item \textbf{AC solution.} Newton's method solves the AC power flow equations, starting from the DC point. The generators share the losses (fact~1). A generator that reaches a reactive limit releases its voltage set point (fact~4).
+  \item \textbf{Check.} Every limit is evaluated at the AC solution: bus voltages (fact~2), branch loadings in MVA at both ends (fact~3), generator reactive and active limits.
+  \item \textbf{Existence check.} A mathematical test confirms that an exact solution of the AC equations lies within a small, stated distance of the computed point.
+  \item \textbf{Repair (optional).} A sequence of small linear programs moves generator active power and voltage set points by the smallest amount that removes the violations. Each step is verified by a new AC solution.
+  \item \textbf{Loss factors.} The marginal loss factor of every bus at the fixed dispatch.
+\end{enumerate}
+
+\subsection{Verdicts}\label{sec:verdicts}
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}lp{11.5cm}@{}}
+\toprule
+\textbf{Verdict} & \textbf{Meaning} \\
+\midrule
+\texttt{FEASIBLE} & An AC solution exists and all checked limits hold. \\
+\texttt{VIOLATED} & An AC solution exists. At least one checked limit is violated. \\
+\texttt{REPAIRED} & Limits were violated. The repair found a nearby dispatch whose AC solution satisfies all checked limits. \\
+\texttt{RELAXED} & The repair left violations. All of them are inside the relaxation that the user accepted (Section~\ref{sec:relax}). \\
+\texttt{NO\_SOLUTION} & No AC solution was found. This is not a proof that none exists. \\
+\bottomrule
+\end{tabular}
+\caption{The five verdicts of \GRIT.}\label{tab:verdicts}
+\end{table}
+
+\subsection{Computing cost}
+
+The reference for the cost is one AC-OPF of the same case. If a check cost more than an AC-OPF, the user would run the AC-OPF. On the test cases of Section~\ref{sec:largecases}, a check takes between 7 and 17 percent of the AC-OPF time for systems of 1354 buses and more. The repair has a time limit (Section~\ref{sec:repair-stop}).
+
+% ====================================================================
+\section{License and Copyright}\label{sec:license}
+
+\GRIT{} is Copyright \copyright{} 2026 Francis Yunhe Hou. It is free software under the GNU General Public License, Version 3 or later (GPL-3.0-or-later). Any use is permitted under the GPL, including commercial use. A commercial license is available for cases where the GPL terms cannot be met, for example distribution inside closed-source software. Contact \url{fyhou@vt.edu} or \url{yunhe.hou@gmail.com}.
+
+\GRIT{} requires MATPOWER, which has its own license (BSD 3-Clause). MATPOWER is not distributed with \GRIT.
+
+Portions of this software were developed with the assistance of Claude, an AI system made by Anthropic. All AI-generated code has been reviewed, tested, and validated by the author. The author assumes full responsibility for the correctness and quality of the final code.
+
+% ====================================================================
+\section{Installation}\label{sec:install}
+
+\subsection{Requirements}
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}lp{11cm}@{}}
+\toprule
+\textbf{Component} & \textbf{Requirement} \\
+\midrule
+MATLAB & R2020b or later. Tested with R2026a. GNU Octave~8 runs the computations. The graphical interface is tested in MATLAB only. \\
+MATPOWER & Version 7.1 or later. Tested with 8.1. \\
+Optimization Toolbox & Recommended. The repair uses \texttt{linprog}. Without it \GRIT{} falls back to the solvers that ship with MATPOWER, which are slower. \\
+\bottomrule
+\end{tabular}
+\caption{Software requirements.}
+\end{table}
+
+\subsection{Steps}
+
+\begin{enumerate}[nosep]
+  \item Install MATPOWER and run its \texttt{install\_matpower} script.
+  \item Copy the \texttt{GRIT} folder to any location.
+  \item In MATLAB, change to the \texttt{GRIT} folder and type \texttt{GRIT\_Launch}. The command adds the folder to the path, checks that MATPOWER is present and opens the interface.
+  \item Optional: type \texttt{GRIT\_TestSuite} to run all tests. Every line should start with \texttt{pass}.
+\end{enumerate}
+
+\subsection{Files}
+
+\begin{table}[H]\centering\small
+\begin{tabular}{@{}p{5.6cm}p{9.2cm}@{}}
+\toprule
+\textbf{File} & \textbf{Purpose} \\
+\midrule
+\texttt{GRIT\_Launch.m} & Path setup and start of the interface. \\
+\texttt{GRIT\_GUI.m} & Graphical interface. \\
+\texttt{GRIT\_Run.m} & One check (and repair) of one case. Main entry on the command line. \\
+\texttt{GRIT\_Batch.m} & Many load levels, or all single branch outages. \\
+\texttt{GRIT\_Report.m} & Markdown report of a result. \\
+\texttt{GRIT\_Config.m} & Options with their defaults. \\
+\texttt{GRIT\_Model.m} & Case loading, input checks, DC dispatch, network matrices. \\
+\texttt{GRIT\_Solve.m}, \texttt{GRIT\_Newton.m} & AC solution with fallbacks. \\
+\texttt{GRIT\_Jacobian.m}, \texttt{GRIT\_StartPoint.m} & Jacobian matrix and start point. \\
+\texttt{GRIT\_Check.m}, \texttt{GRIT\_Band.m} & Limit check. Effect of reactive load uncertainty. \\
+\texttt{GRIT\_Certificate.m} & Existence check of the AC solution. \\
+\texttt{GRIT\_Sensitivity.m} & First-order sensitivities. \\
+\texttt{GRIT\_Repair.m}, \texttt{GRIT\_LP.m} & Repair and its linear program. \\
+\texttt{GRIT\_Price.m} & Marginal loss factors. \\
+\texttt{GRIT\_Compare.m} & Comparison with MATPOWER (comparison only). \\
+\texttt{GRIT\_Test*.m} & Regression, robustness and interface tests. \\
+\texttt{Config/} & Logo files. \\
+\texttt{Doc/} & This manual. \\
+\bottomrule
+\end{tabular}
+\caption{Files of the distribution.}
+\end{table}
+
+% ====================================================================
+\section{Quick Start}\label{sec:quick}
+
+\begin{lstlisting}
+GRIT_Launch                                        % graphical interface
+
+R = GRIT_Run('case118');                           % check
+R = GRIT_Run('case30', 'repair.enable', true);     % check and repair
+GRIT_Report(R);                                    % Markdown report
+
+B = GRIT_Batch('case118', 'n-1', []);              % all single branch outages
+B = GRIT_Batch('case118', 'load', 0.6:0.2:1.6);    % six load levels
+\end{lstlisting}
+
+\texttt{R.verdict} holds the verdict. \texttt{R.violations} lists every violated limit. Section~\ref{sec:cmdline} describes the result structure.
+
+% ====================================================================
+\section{The Graphical Interface}\label{sec:gui}
+
+\subsection{Main window}
+
+\shot{gui_start.png}{The main window after start. Menu bar at the top, options on the left, result area on the right, status bar at the bottom.}
+
+The window has five areas.
+
+\begin{enumerate}[nosep]
+  \item \textbf{Menu bar.} Four menus: \menu{File}, \menu{Settings}, \menu{Analysis}, \menu{Help} (Section~\ref{sec:menus}).
+  \item \textbf{Option panel (left).} The case, the dispatch, the limits and the analysis switches (Section~\ref{sec:panel}).
+  \item \textbf{Cards.} Six cards show the verdict, the number of violations, the voltage range, the largest branch loading, the losses and the computing time.
+  \item \textbf{Plot and table.} A plot selected by the list above it, and the table of violations.
+  \item \textbf{Console and status bar.} The console shows the text summary of each run. The status bar shows the state of the last action and whether MATPOWER was found.
+\end{enumerate}
+
+\subsection{Option panel}\label{sec:panel}
+
+\begin{table}[H]\centering\small
+\begin{tabular}{@{}p{4.6cm}p{10.4cm}@{}}
+\toprule
+\textbf{Field} & \textbf{Meaning} \\
+\midrule
+CASE & Name of a MATPOWER case on the path (for example \texttt{case118}), or the full name of a case file. \btn{Browse for a case file} opens a file dialog. \\
+Dispatch source & \emph{DC-OPF run by GRIT}: the tool computes the DC dispatch. \emph{Active power of the case}: the values in the \texttt{PG} column are the dispatch. Use the second choice for a dispatch computed elsewhere. \\
+Load scaling & All active and reactive loads are multiplied by this factor. \\
+Sharing of losses & Which generators cover the losses (Section~\ref{sec:model}). \\
+V minimum, V maximum & Voltage limits in pu for all buses. Blank keeps \texttt{VMIN} and \texttt{VMAX} of the case. \\
+Branch limit & The rating applies to MVA (default), MW or current. \\
+Rating scaling & All branch ratings are multiplied by this factor. \\
+Enforce generator reactive limits & On: a generator at a reactive limit releases its voltage set point. Off: set points are held and reactive limits appear as violations. \\
+Existence check of the AC solution & On: the test of Section~\ref{sec:cert} runs. \\
+Repair violated limits & On: the repair of Section~\ref{sec:repair} runs when limits are violated. \\
+Voltage relaxation, Loading relaxation & Violations that the user accepts when the repair cannot remove them (Section~\ref{sec:relax}). Zero means none. \\
+Compare with AC-OPF & On: MATPOWER's AC-OPF runs after the check. Its cost and time appear in the report. The comparison is never used by the analysis. \\
+\bottomrule
+\end{tabular}
+\caption{Fields of the option panel.}
+\end{table}
+
+\btn{Check and Repair} (or \texttt{Ctrl+R}) starts a run. \btn{Batch: N-1 of all branches} removes one branch at a time. \btn{Write report} saves a Markdown report of the last run.
+
+\subsection{A run with a violation}
+
+\shot{gui_case30_violated.png}{\texttt{case30} with the repair switched off. The verdict is \texttt{VIOLATED}. The table shows one overloaded branch: 34.45~MVA against a rating of 32~MVA.}
+
+The DC-OPF loads branch 10 (bus 6 to bus 8) to exactly its rating of 32~MW. In the AC network the same branch also carries reactive power. Its apparent power is 34.45~MVA, which is 107.7 percent of the rating. The voltage plot shows every bus inside its limits (the red lines).
+
+\shot{gui_case30_loading.png}{Plot \emph{Branch loading} for the same run. One bar crosses the 100 percent line.}
+
+\subsection{The same run with repair}
+
+\shot{gui_case30_repaired.png}{\texttt{case30} with the repair switched on. The verdict is \texttt{REPAIRED} and the table of violations is empty.}
+
+The repair moved 24.1~MW between generators and changed six voltage set points. The largest loading is now 99.8 percent. Section~\ref{sec:ex30} gives all numbers.
+
+\shot{gui_case30_dispatch.png}{Plot \emph{Dispatch: DC and AC}. For every generator the first bar is the DC dispatch and the second bar is the dispatch after loss sharing and repair.}
+
+\shot{gui_case30_flow.png}{Plot \emph{AC and DC active flow}. A point on the diagonal means that the AC and DC active flows of a branch are equal.}
+
+\shot{gui_case30_lossfactors.png}{Plot \emph{Marginal loss factors}. A positive value means that one more MW injected at the bus increases the losses.}
+
+\subsection{Menus}\label{sec:menus}
+
+\shot[0.8]{gui_menu_1.png}{Menu \menu{File}: open a case file, write the report, save the result structure as a MAT-file, exit.}
+\shot[0.8]{gui_menu_2.png}{Menu \menu{Settings}: advanced settings, reset of all settings.}
+\shot[0.8]{gui_menu_3.png}{Menu \menu{Analysis}: check and repair, the two batch modes, the five plots.}
+\shot[0.8]{gui_menu_4.png}{Menu \menu{Help}: user guide, information about the tool, citation.}
+
+\subsection{Advanced settings}
+
+\shot[0.6]{dlg_settings.png}{Dialog \menu{Settings > Advanced Settings}.}
+
+The dialog changes the options that are needed less often. Appendix~\ref{sec:configref} explains each of them. A value that is not a number, or is negative, is refused with a message inside the dialog.
+
+\subsection{Batch runs}
+
+\shot{gui_case118_batch.png}{N-1 batch of \texttt{case118}. One point per outage. The vertical position is the number of violations after the outage.}
+
+\menu{Analysis > Batch: N-1 of All Branches} keeps the dispatch of the intact network and removes one branch at a time. \menu{Analysis > Batch: Load Levels} asks for a list of load scaling factors and runs one complete check for each. Section~\ref{sec:batch} describes both modes.
+
+\subsection{No AC solution}
+
+\shot{gui_no_solution.png}{A dispatch without an AC solution: \texttt{case118} with its own dispatch and 3.2 times the load. The console states how far the continuation got.}
+
+When no AC solution is found the cards other than the verdict stay empty. The console gives the reason, the largest angle difference of the DC solution and the comparison of the loss estimate with the generation headroom.
+
+\subsection{Input errors}
+
+\shot{gui_input_error.png}{A field that does not hold a number. The console and the status bar name the field and show what it holds.}
+
+Every field is checked before a run. A wrong entry stops the run with one line that names the field. Wrong case data (for example a network that is not connected) is reported in the same way.
+
+\subsection{Help dialogs}
+
+\shot[0.75]{dlg_guide.png}{\menu{Help > User Guide}.}
+\shot[0.7]{dlg_about.png}{\menu{Help > About GRIT}.}
+\shot[0.7]{dlg_cite.png}{\menu{Help > Citation Info}.}
+
+% ====================================================================
+\section{Command Line Use}\label{sec:cmdline}
+
+\subsection{GRIT\_Run}
+
+\begin{lstlisting}
+R = GRIT_Run(input)
+R = GRIT_Run(input, 'name', value, ...)
+R = GRIT_Run(input, opts)
+\end{lstlisting}
+
+\texttt{input} is a case name, a case file name or a MATPOWER case structure. Options are given by dotted name (\texttt{'repair.enable', true}) or as a structure from \texttt{GRIT\_Config}. An unknown option name is an error.
+
+\begin{table}[H]\centering\small
+\begin{tabular}{@{}lp{11cm}@{}}
+\toprule
+\textbf{Field of \texttt{R}} & \textbf{Content} \\
+\midrule
+\texttt{verdict} & One of the five verdicts of Table~\ref{tab:verdicts}. \\
+\texttt{violations} & Cell table: kind, element, value, limit, excess, unit. \\
+\texttt{check} & All checked quantities and margins (internal numbering). \\
+\texttt{ac} & AC solution in tables: \texttt{bus}, \texttt{branch}, \texttt{gen}, with column names in \texttt{bus\_cols} and so on. Losses, cost, AC minus DC flow. \\
+\texttt{dc} & DC dispatch, DC angles, DC flows, DC prices, DC cost. \\
+\texttt{newton} & Iteration log, number of factorizations, state of the reactive limits, path taken. \\
+\texttt{cert} & Existence check: $\eta$, $\omega$, $h$, radii, mode. \\
+\texttt{repair} & Repair: success, rounds, changes by generator and by bus, cost change, relaxation still needed. \\
+\texttt{initial} & After a repair: the check and the AC solution before the repair. \\
+\texttt{price} & Loss factors and loss price components. \\
+\texttt{compare} & Results of MATPOWER when a comparison was requested. \\
+\texttt{time} & Seconds per stage. \texttt{time.total} excludes the DC dispatch, which is the input of the check. \\
+\texttt{model}, \texttt{solution} & Network model and complex voltages, for further computation. \\
+\bottomrule
+\end{tabular}
+\caption{Fields of the result structure.}
+\end{table}
+
+\subsection{GRIT\_Batch}\label{sec:batch}
+
+\begin{lstlisting}
+B = GRIT_Batch(input, 'load', scales, ...)
+B = GRIT_Batch(input, 'n-1', branches, ...)
+\end{lstlisting}
+
+\textbf{Mode \texttt{'load'}.} One complete run of \texttt{GRIT\_Run} for every load scaling factor. Each scenario has its own DC dispatch. Use it for the periods of a day.
+
+\textbf{Mode \texttt{'n-1'}.} The DC dispatch of the intact network is kept. One branch is removed at a time. \texttt{branches} lists rows of the branch table. An empty list means every in-service branch. Each outage costs one AC solution that starts from the solution of the intact network. A branch whose removal splits the network is reported as \texttt{ISLAND} and is not solved. The repair and the loss factors are switched off in this mode.
+
+\texttt{B.table} has one row per scenario: scenario value, verdict code, number of violations, lowest voltage, largest loading, time. \texttt{B.verdict} holds the verdict names and \texttt{B.count} the number of scenarios per verdict.
+
+\subsection{GRIT\_Report}
+
+\texttt{GRIT\_Report(R)} writes \texttt{GRIT\_report\_<case>.md} in the current folder. \texttt{GRIT\_Report(R, file)} writes to the given file. The report holds the verdict, the options, the AC solution, the repair with the changed generators, the table of violations (first 50 rows), the existence check, the loss factors and the time per stage.
+
+\subsection{Input checking}\label{sec:inputcheck}
+
+Every run starts with a check of the case and of the options. A problem ends the run with an error whose identifier starts with \texttt{GRIT:} and whose message names the cause. The checks are:
+
+\begin{itemize}[nosep]
+  \item the case can be loaded and has bus, generator and branch tables that are not empty,
+  \item loads are finite numbers,
+  \item no bus has \texttt{VMIN} above \texttt{VMAX}, no generator has \texttt{QMIN} above \texttt{QMAX}, every voltage set point is positive,
+  \item the in-service network is connected and has exactly one reference bus,
+  \item cost data exist when \GRIT{} runs the DC-OPF,
+  \item the DC-OPF (or the DC power flow) converges,
+  \item every option has an allowed value.
+\end{itemize}
+
+% ====================================================================
+\part{Algorithms}\label{part:algorithms}
+% ====================================================================
+
+\clearpage
+\section{A Two-Bus Example}\label{sec:twobus}
+
+This section shows the whole method on the smallest possible network. The general statements follow in the next sections.
+
+\textbf{Network.} Bus~1 is the reference bus with one generator and a voltage set point of 1~pu. Bus~2 has a load of $100$~MW and $40$~Mvar. One branch connects the buses, with resistance $r=0.02$~pu, reactance $x=0.10$~pu and a rating of 105~MVA. The voltage limits are 0.95 and 1.05~pu. The base is 100~MVA.
+
+\textbf{DC result.} The DC model sees a flow of exactly 100~MW, a voltage of 1~pu at both buses and an angle of $-x P = -0.1$~rad ($-5.73^\circ$) at bus~2. The flow is below the rating of 105. The DC dispatch is feasible in the DC model.
+
+\textbf{AC result.} \GRIT{} solves the AC equations from the DC point. Newton's method converges in three iterations. The mismatch falls from 0.64~pu to $4.0\times10^{-2}$, $2.2\times10^{-4}$ and below $10^{-8}$.
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Quantity} & \textbf{DC model} & \textbf{AC solution} \\
+\midrule
+Voltage at bus 2 (pu) & 1.0000 & 0.9306 \\
+Angle at bus 2 (degree) & $-5.73$ & $-5.67$ \\
+Active power sent from bus 1 (MW) & 100.00 & 102.68 \\
+Reactive power sent from bus 1 (Mvar) & not modeled & 53.39 \\
+Apparent power at bus 1 (MVA) & 100.00 & 115.73 \\
+Losses (MW) & 0 & 2.68 \\
+\bottomrule
+\end{tabular}
+\caption{Two-bus example: DC model and AC solution.}
+\end{table}
+
+\textbf{Check.} Two limits are violated. The voltage at bus~2 is 0.9306~pu, which is 0.0194~pu below the lower limit. The branch carries 115.73~MVA, which is 10.73~MVA above its rating. The verdict is \texttt{VIOLATED}. All four physical facts of Section~\ref{sec:physics} appear: the generator produces 2.68~MW of losses, the voltage drops by 7 percent, and the reactive flow of 53.39~Mvar raises the apparent power 15.7 percent above the active power of the DC model.
+
+\textbf{Existence check.} At the computed point one more Newton step has the size $\eta=1.7\times10^{-9}$~pu. The constant of the test is $\omega=9.03$. Their product $h=1.5\times10^{-8}$ is below $1/2$. An exact solution of the AC equations therefore lies within $1.7\times10^{-9}$~pu of the computed voltages, and it is the only solution within $0.22$~pu.
+
+\textbf{Loss factor.} The marginal loss factor of bus~2 is $-0.048$. One more MW injected at bus~2 (one MW less load) reduces the losses by 0.048~MW.
+
+% ====================================================================
+\section{Notation}\label{sec:notation-alg}
+
+\begin{table}[H]\centering\small
+\begin{tabular}{@{}lp{12cm}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} \\
+\midrule
+$n_b$, $n_g$, $n_l$ & Number of buses, generators and branches in service. \\
+$r$ & Index of the reference bus. \\
+$\mathcal{PV}$, $\mathcal{PQ}$ & Buses that hold a voltage set point (other than $r$), and buses whose voltage magnitude is unknown. \\
+$V_i$, $\theta_i$ & Voltage magnitude (pu) and angle (rad) of bus $i$. $\mathbf{v}_i = V_i e^{j\theta_i}$. \\
+$Y=G+jB$ & Bus admittance matrix. \\
+$P_i(\theta,V)$, $Q_i(\theta,V)$ & Active and reactive power that bus $i$ injects into the network, $P_i + jQ_i = \mathbf{v}_i \sum_k \overline{Y_{ik}\mathbf{v}_k}$. \\
+$P^{\mathrm{DC}}_g$ & DC dispatch of generator $g$ (pu). \\
+$P^D_i$, $Q^D_i$ & Active and reactive load at bus $i$ (pu). \\
+$V^{\mathrm{set}}_i$ & Voltage set point of a generator bus. \\
+$\underline{Q}_i$, $\overline{Q}_i$ & Reactive limits of bus $i$: sums of the limits of its generators. \\
+$s$ & Loss variable: active power that the generators add to the DC dispatch (pu). \\
+$\alpha_g$, $a_i$ & Share of generator $g$ in $s$, and share of bus $i$: $a_i=\sum_{g \text{ at } i}\alpha_g$, $\sum_g\alpha_g=1$. \\
+$S^f_l$, $S^t_l$ & Complex power entering branch $l$ at its from end and at its to end. \\
+$\overline{S}_l$ & Rating of branch $l$ (0 means no limit). \\
+\bottomrule
+\end{tabular}
+\caption{Notation of Part~II. All quantities are per unit on the system base unless a unit is given.}
+\end{table}
+
+% ====================================================================
+\section{Network Model and Loss Sharing}\label{sec:model}
+
+\subsection{Equations}
+
+The DC dispatch balances generation and load without losses. In the AC network the generation must also cover the losses (fact~1 of Section~\ref{sec:physics}). \GRIT{} adds one unknown $s$ for the total extra generation and distributes it among the generators with fixed shares $\alpha_g$. The AC equations are
+\begin{align}
+P_i(\theta,V) &= \sum_{g \text{ at } i} P^{\mathrm{DC}}_g - P^D_i + a_i\, s, & i &= 1,\dots,n_b, \label{eq:P}\\
+Q_i(\theta,V) &= -Q^D_i, & i &\in \mathcal{PQ}. \label{eq:Q}
+\end{align}
+The unknowns are $\theta_i$ for $i\neq r$, $V_i$ for $i\in\mathcal{PQ}$, and $s$. The reference angle $\theta_r$ is given by the DC solution. The magnitudes of the generator buses are their set points. The number of equations, $n_b+|\mathcal{PQ}|$, equals the number of unknowns.
+
+\subsection{Shares}
+
+The option \opt{slack.mode} selects the shares.
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}lp{11.5cm}@{}}
+\toprule
+\textbf{Mode} & \textbf{Share of generator $g$} \\
+\midrule
+\texttt{headroom} (default) & Proportional to $\max(\overline{P}_g - P^{\mathrm{DC}}_g,\,0)$. A unit at its upper limit takes no share. If no unit has headroom, the mode \texttt{pmax} is used. \\
+\texttt{pmax} & Proportional to $\overline{P}_g$. \\
+\texttt{single} & The first generator at the reference bus takes all losses. This is the convention of a classical power flow. \\
+\bottomrule
+\end{tabular}
+\caption{Modes of loss sharing.}
+\end{table}
+
+\begin{notebox}[title={Why the losses are shared}]
+On a large system the losses reach one to three percent of the load, which can be more than the capacity of the unit at the reference bus. In the 2000-bus test case of Section~\ref{sec:largecases} the losses are 1744~MW and the reference unit has a capacity of 1354~MW that the DC dispatch already uses in full. With the mode \texttt{single} the AC equations have no solution for that case. With shared losses they do.
+\end{notebox}
+
+After the solution the AC dispatch of generator $g$ is $P^{\mathrm{AC}}_g = P^{\mathrm{DC}}_g + \alpha_g s$. The check compares it with the active limits of the unit.
+
+% ====================================================================
+\section{AC Solution from the DC Point}\label{sec:newton}
+
+\subsection{Start point}
+
+The start point has the DC angles. Generator buses start at their set points. The other buses start at 1~pu. The loss variable starts at the estimate $s^0=\sum_l r_l \,(P^{\mathrm{DC}}_l)^2$, where $r_l$ is the series resistance and $P^{\mathrm{DC}}_l$ the DC flow of branch $l$.
+
+\subsection{Newton iteration with step halving}
+
+Write the equations \eqref{eq:P} and \eqref{eq:Q} as $F(x)=0$ with $x=(\theta, V_{\mathcal{PQ}}, s)$. One iteration solves $J(x)\,\Delta x = -F(x)$ with the sparse Jacobian matrix $J$ and sets $x \leftarrow x + \lambda\,\Delta x$. The factor $\lambda$ starts at 1. It is halved while
+\[
+\|F(x+\lambda\Delta x)\|_2 > (1-10^{-4}\lambda)\,\|F(x)\|_2 ,
+\]
+down to the smallest value \opt{newton.step\_min} ($1/64$). If the mismatch does not decrease at the smallest factor, the iteration stops without a solution. The iteration converges when the largest mismatch $\|F(x)\|_\infty$ is below \opt{newton.tol} ($10^{-8}$~pu).
+
+The column of $J$ for the unknown $s$ holds $-a_i$ in the active power rows and zero elsewhere. All other entries are the usual derivatives of $P$ and $Q$ with respect to angles and magnitudes.
+
+\subsection{Reactive limits of generators}\label{sec:qlim}
+
+A generator holds its voltage set point by adjusting its reactive output. When the output reaches a limit, the set point can no longer be held (fact~4). \GRIT{} models this inside the solution. After each convergence it computes the reactive output of every generator bus, $Q^G_i = Q_i(\theta,V)+Q^D_i$, and applies three rules.
+
+\begin{enumerate}[nosep]
+  \item \textbf{To a limit.} If $Q^G_i > \overline{Q}_i$, the output is fixed at $\overline{Q}_i$ and $V_i$ becomes an unknown. Bus $i$ moves from $\mathcal{PV}$ to $\mathcal{PQ}$. The same holds at the lower limit.
+  \item \textbf{Back to the set point.} A bus fixed at its upper limit returns to its set point when $V_i > V^{\mathrm{set}}_i$. At the upper limit the unit gives all the reactive power it can. A voltage above the set point means that less is needed. A bus fixed at its lower limit returns when $V_i < V^{\mathrm{set}}_i$.
+  \item \textbf{Stop of repeated switching.} A bus that has returned more than twice stays at its limit. The result reports the number of such buses (\texttt{check.n\_unresolved}).
+\end{enumerate}
+
+The iteration then continues from the present point. At most \opt{newton.q\_rounds} (20) rounds of switching are made. The reference bus follows the same rules. When it is at a limit its angle stays fixed, its magnitude becomes an unknown and its reactive balance becomes an equation. Limits of $9999$~Mvar or more are read as ``no limit''.
+
+At the end every generator bus is in one of three states: it holds its set point with its reactive output inside the limits, it sits at the upper limit with a voltage at or below the set point, or it sits at the lower limit with a voltage at or above the set point.
+
+With \opt{newton.enforce\_q} set to false the set points are always held, and reactive outputs outside the limits appear as violations in the check.
+
+\subsection{Fallbacks when Newton's method fails}\label{sec:fallback}
+
+\begin{enumerate}[nosep]
+  \item \textbf{Second start point.} With \opt{newton.vm\_init} = \texttt{'auto'} the iteration is repeated from the DC angles and the voltage magnitudes stored in the case.
+  \item \textbf{Continuation.} All injections (dispatch and load) are multiplied by a factor $t$ that grows from 0 to 1 in steps of at most 0.25. Each step starts from the solution of the previous one. A failed step is halved, down to $1/64$. Generator set points are held along this path, because at low injections the line charging would push many units to their lower reactive limit. If $t=1$ is reached, one more solution with the reactive limits finishes the run. The continuation spends at most \opt{newton.cont\_max\_fact} (60) factorizations.
+\end{enumerate}
+
+If no solution is found the verdict is \texttt{NO\_SOLUTION}. The result states the largest value of $t$ that had a solution (\texttt{newton.reach}). It also lists the branches whose DC angle difference exceeds $60^\circ$. An angle difference near or above $90^\circ$ means that the DC flow exceeds what the branch can transfer in the AC network.
+
+\begin{warnbox}
+\texttt{NO\_SOLUTION} means that these methods found no solution. It is not a mathematical proof that the AC equations have none.
+\end{warnbox}
+
+% ====================================================================
+\section{Check of Operating Limits}\label{sec:check}
+
+The check evaluates the following conditions at the AC solution. Each condition has a tolerance (group \opt{tol}).
+
+\begin{table}[H]\centering\small
+\begin{tabular}{@{}p{3.2cm}p{7.3cm}p{4.3cm}@{}}
+\toprule
+\textbf{Kind} & \textbf{Condition} & \textbf{Tolerance} \\
+\midrule
+Voltage & $\underline{V}_i \le V_i \le \overline{V}_i$ for every bus & $10^{-5}$~pu \\
+Branch loading & $\max(|S^f_l|,|S^t_l|) \le \overline{S}_l$ for every rated branch & $10^{-3}$~MVA \\
+Reactive power & $\underline{Q}_i \le Q^G_i \le \overline{Q}_i$ for every generator bus & $10^{-3}$~Mvar \\
+Active power & $\underline{P}_g \le P^{\mathrm{DC}}_g+\alpha_g s \le \overline{P}_g$ for every generator & $10^{-3}$~MW \\
+Angle difference & $\underline{\delta}_l \le \theta_f-\theta_t \le \overline{\delta}_l$ (only with \opt{limits.angle}) & $10^{-4}$ degree \\
+\bottomrule
+\end{tabular}
+\caption{Checked limits.}\label{tab:limits}
+\end{table}
+
+The branch limit applies to apparent power by default. With \opt{limits.flow} = \texttt{'P'} it applies to $\max(|\mathrm{Re}\,S^f_l|,|\mathrm{Re}\,S^t_l|)$, and with \texttt{'I'} to the larger current magnitude of the two ends.
+
+\textbf{Reactive load uncertainty.} With \opt{q\_margin} $=\varepsilon>0$ every reactive load may deviate by $\pm\varepsilon|Q^D_i|$. For each voltage within 0.02~pu of a limit and each branch within 10 percent of its rating, \GRIT{} computes the first-order worst case $\sum_i |\partial y/\partial Q_i|\,\varepsilon|Q^D_i|$ with the sensitivities of Section~\ref{sec:sens}. Quantities whose worst case crosses the limit are listed in \texttt{check.band}. They do not change the verdict.
+
+% ====================================================================
+\section{Existence Check of the AC Solution}\label{sec:cert}
+
+\subsection{Purpose}
+
+Newton's method returns a point whose mismatch is below a tolerance. The existence check answers a sharper question: is there an exact solution of the AC equations near this point, and how near? The answer makes the verdict a statement about a true AC operating point and not only about a numerical approximation.
+
+\subsection{Equations in rectangular coordinates}
+
+Write each bus voltage as $\mathbf{v}_i = e_i + j f_i$. In these coordinates the injections are polynomials of degree two:
+\begin{align*}
+P_i &= \sum_k \big[\, G_{ik}(e_i e_k + f_i f_k) + B_{ik}(f_i e_k - e_i f_k) \,\big], \\
+Q_i &= \sum_k \big[\, G_{ik}(f_i e_k - e_i f_k) - B_{ik}(e_i e_k + f_i f_k) \,\big].
+\end{align*}
+The unknown vector is $x=(e,f,s)$ over all buses except the reference bus. The equations are the active balance \eqref{eq:P} of every bus, the reactive balance \eqref{eq:Q} of the $\mathcal{PQ}$ buses, and $e_i^2+f_i^2=(V^{\mathrm{set}}_i)^2$ for the $\mathcal{PV}$ buses. Call this system $F(x)=0$. Because every equation has degree two, the Jacobian matrix $J(x)$ is an affine function of $x$, and the second derivatives $H_{mjk}=\partial^2 F_m/\partial x_j\partial x_k$ are constants that depend only on $Y$.
+
+\subsection{The test}
+
+Let $x_0$ be the computed point and $J_0=J(x_0)$. Define
+\begin{align*}
+\eta &= \|J_0^{-1}F(x_0)\|_\infty, &
+\beta_m &= \sum_{j,k} |H_{mjk}|, &
+\omega &= \big\|\, |J_0^{-1}|\,\beta \,\big\|_\infty, &
+h &= \eta\,\omega .
+\end{align*}
+$\eta$ is the size of one more Newton step. $|J_0^{-1}|$ is the matrix of absolute values.
+
+\begin{tcolorbox}[colback=white,colframe=grim-blue,title={Newton-Kantorovich theorem (form used by \GRIT)}]
+If $h \le 1/2$, then
+\begin{enumerate}[nosep]
+  \item an exact solution $x^*$ of $F(x)=0$ exists with $\|x^*-x_0\|_\infty \le \rho^- = \dfrac{1-\sqrt{1-2h}}{\omega}$,
+  \item $x^*$ is the only solution with $\|x-x_0\|_\infty < \rho^+ = \dfrac{1+\sqrt{1-2h}}{\omega}$.
+\end{enumerate}
+\end{tcolorbox}
+
+\textbf{Why $\omega$ is the right constant.} The theorem needs a number $\omega$ with $\|J_0^{-1}(J(x)-J(y))\|_\infty \le \omega\|x-y\|_\infty$ for all $x,y$. Since $J$ is affine, $(J(x)-J(y))_{mj}=\sum_k H_{mjk}(x_k-y_k)$. For row $i$ of the product,
+\[
+\sum_j \Big| \sum_m (J_0^{-1})_{im} \sum_k H_{mjk}(x_k-y_k) \Big|
+\;\le\; \sum_m |(J_0^{-1})_{im}| \sum_{j,k}|H_{mjk}| \;\|x-y\|_\infty
+= \big(|J_0^{-1}|\beta\big)_i \,\|x-y\|_\infty .
+\]
+The largest row gives $\omega$.
+
+\textbf{What the result means.} When the iteration has converged, $\eta$ is of the order $10^{-9}$ or smaller and the test passes. The radius $\rho^-$ is then practically equal to $\eta$. Every checked quantity of the exact solution differs from the computed one by at most a multiple of $\rho^-$: at most $\sqrt2\rho^-$ for a voltage magnitude, and at most $\sqrt2\,(|I|+V\sum|Y|)\,\rho^-$ for a branch flow or a bus injection, where $|I|$ is the current and $\sum|Y|$ the absolute row sum of the admittance matrix. \GRIT{} reports how many limits have a margin smaller than this possible change (\texttt{cert.undecided}). In normal cases the number is zero, and the verdict holds for the exact solution.
+
+\subsection{Two ways to compute \texorpdfstring{$\omega$}{omega}}
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}lp{11.8cm}@{}}
+\toprule
+\textbf{Mode} & \textbf{Computation} \\
+\midrule
+\texttt{exact} & $|J_0^{-1}|\beta$ is formed column block by column block from one sparse factorization. The cost grows with the square of the system size. \\
+\texttt{estimate} & A 1-norm estimator (Hager 1984, Higham 1988) needs a few solves with $J_0$ and its transpose. The estimate is a lower bound of the exact value. In tests it differed from the exact value by at most 1.5 percent. \\
+\texttt{auto} (default) & \texttt{exact} up to \opt{cert.exact\_max\_bus} (1500) buses, \texttt{estimate} above. \\
+\bottomrule
+\end{tabular}
+\caption{Modes of the existence check.}
+\end{table}
+
+\subsection{What the test does not provide}
+
+\begin{itemize}[nosep]
+  \item \textbf{No guarantee from the DC point.} The same theorem applied at the DC point would guarantee that Newton's method converges from there. This fails in practice. On standard cases from 9 to 3120 buses the value of $h$ at the DC point ranged from about 5 to about $4\times10^5$, far above $1/2$. The reason is that $\beta$ sums the absolute second derivatives of the whole network. \GRIT{} therefore runs the iteration and applies the test afterwards.
+  \item \textbf{A small uniqueness radius.} For the same reason $\rho^+$ is small on large systems. It is reported but should not be read as a stability margin.
+  \item \textbf{No rounding control.} The computation uses floating-point arithmetic. In the mode \texttt{estimate} the constant is not a strict bound.
+\end{itemize}
+
+% ====================================================================
+\section{Sensitivities}\label{sec:sens}
+
+The repair and the loss factors need the first-order change of a quantity $y$ (a voltage magnitude, a branch loading, a reactive output, or the loss variable) with respect to three kinds of controls. Let $x$ be the unknown vector of Section~\ref{sec:newton} and $J$ its Jacobian matrix at the solution. Solve one linear system with the transposed matrix,
+\[
+J^{\mathsf T}\lambda = \nabla_x y .
+\]
+Then
+\begin{align*}
+\frac{\partial y}{\partial P^{\mathrm{inj}}_i} &= \lambda_{P_i}, &
+\frac{\partial y}{\partial Q^{\mathrm{inj}}_i} &= \lambda_{Q_i}\ (i\in\mathcal{PQ}), &
+\frac{\partial y}{\partial V^{\mathrm{set}}_k} &= \frac{\partial y}{\partial V_k} - \lambda^{\mathsf T}\frac{\partial F}{\partial V_k},
+\end{align*}
+where $\lambda_{P_i}$ and $\lambda_{Q_i}$ are the entries of $\lambda$ that belong to the active and reactive balance of bus $i$. The reason is the implicit function theorem: an injection enters equation $i$ with coefficient $-1$, so $\partial x/\partial P^{\mathrm{inj}}_i = J^{-1}e_{P_i}$ and $\partial y/\partial P^{\mathrm{inj}}_i=\nabla_x y^{\mathsf T}J^{-1}e_{P_i}=\lambda_{P_i}$.
+
+The cost is one factorization of $J$ and one solve per quantity. \GRIT{} computes sensitivities only for the quantities that are violated or close to a limit. The regression tests compare these values with central finite differences. The largest difference is below $10^{-5}$.
+
+% ====================================================================
+\section{Repair}\label{sec:repair}
+
+\subsection{Idea}
+
+The repair searches a dispatch near the DC dispatch whose AC solution satisfies all checked limits. It works in rounds. Each round replaces the nonlinear AC relations by their first-order model at the present solution, solves a linear program for the smallest change of the controls, applies the change and solves the AC equations again. Only the new AC solution decides whether the step is kept.
+
+\subsection{Controls}
+
+\begin{itemize}[nosep]
+  \item $\Delta P_g$: change of the active power of every generator, split into $\Delta P_g^+ - \Delta P_g^-$ with both parts nonnegative.
+  \item $\Delta V_k$: change of the voltage set point of every generator bus that holds its set point, split in the same way. With \opt{repair.controls} = \texttt{'p'} these controls are not used.
+\end{itemize}
+
+\subsection{Limits that enter a round}
+
+A limit enters when it is violated or close: a load-bus voltage within 0.01~pu of a limit, a branch within 15 percent of its rating, a generator bus within 5 percent of its reactive range from a reactive limit. A limit that has entered stays in all later rounds. Let $y_c$ be the present value of such a quantity, $\overline{y}_c$ its limit and $g_c$ its row of sensitivities.
+
+\subsection{Linear program of one round}
+
+\begin{align}
+\min\quad & \sum_g (\Delta P_g^+ + \Delta P_g^-) \;+\; w_V\sum_k (\Delta V_k^+ + \Delta V_k^-) \;+\; M \sum_c u_c \label{eq:lp}\\
+\text{subject to}\quad
+& y_c + g_c^{P}\Delta P + g_c^{V}\Delta V \;\le\; \overline{y}_c - \delta_c + u_c \quad \text{for every entered upper limit}, \notag\\
+& y_c + g_c^{P}\Delta P + g_c^{V}\Delta V \;\ge\; \underline{y}_c + \delta_c - u_c \quad \text{for every entered lower limit}, \notag\\
+& \textstyle\sum_g \Delta P_g = 0, \qquad u_c \ge 0, \notag\\
+& \text{bounds on } \Delta P_g^\pm \text{ and } \Delta V_k^\pm \text{ (below)}. \notag
+\end{align}
+
+\begin{itemize}[nosep]
+  \item The first term is the active power moved, in MW. The repair therefore prefers the smallest redispatch.
+  \item $w_V$ prices a set-point change (\opt{repair.w\_v}: 0.1 per 0.01~pu). Voltage changes are cheap compared with redispatch.
+  \item $u_c$ is the part of limit $c$ that the round cannot satisfy. Its price $M$ is $10^4$ times the price of 1~MW, so $u_c$ is positive only when the controls reach their bounds. The values $u_c$ are the basis of the relaxation report (Section~\ref{sec:relax}).
+  \item $\delta_c$ tightens each limit a little so that the nonlinear AC solution, which differs from the linear model, ends inside the limit. It starts at $10^{-3}$ (pu for voltages, fraction of the rating for branches, fraction of the range for reactive limits).
+  \item The balance $\sum_g\Delta P_g=0$ keeps the redispatch neutral. The change of the losses is covered by the loss variable in the next AC solution.
+\end{itemize}
+
+\textbf{Bounds.} A generator may move by at most \opt{repair.step\_p} (10 percent of $\overline{P}_g$) per round, by at most \opt{repair.ramp\_pct} of $\overline{P}_g$ in total, and not beyond its active limits. A set point may move by at most \opt{repair.step\_v} (0.02~pu) per round, by at most \opt{repair.dv\_max} (0.05~pu) in total, and not beyond the voltage limits of its bus. A unit above $\overline{P}_g$ or a set point outside the voltage limits is forced back by a lower bound on the corresponding variable.
+
+\textbf{Solver.} The program is solved by \texttt{linprog} when the Optimization Toolbox is present, otherwise by GLPK (Octave) or by MIPS (ships with MATPOWER). Before the solve, entries that are numerical noise are removed, rows are scaled and variables with equal bounds are eliminated. A returned point is accepted only when it satisfies all constraints of the program.
+
+\subsection{Acceptance of a step}
+
+Define the total violation of an AC solution as
+\[
+\Phi = \sum_{\text{voltage}} \frac{\text{excess (pu)}}{0.01} + \sum_{\text{branch}} \frac{100\cdot\text{excess}}{\text{rating}} + \sum_{\text{generator}} \frac{100\cdot\text{excess (pu)}}{1} .
+\]
+A voltage excess of 0.01~pu and a branch overload of 1 percent count the same. After the AC solution of the new dispatch:
+
+\begin{itemize}[nosep]
+  \item If $\Phi$ decreased, the step is kept.
+  \item If $\Phi$ did not decrease, the step is discarded and the step bounds are halved.
+  \item If the AC equations have no solution for the new dispatch, the step itself is halved (down to one eighth), and discarded if that fails.
+  \item If the linear program was satisfied ($u_c=0$) but the AC check still finds violations, or if the step was discarded, $\delta_c$ is doubled (up to 16 times its start value).
+\end{itemize}
+
+The AC solution of each round starts from the previous voltages and from the previous state of the generator reactive limits. It usually needs two to four iterations.
+
+\subsection{End of the repair}\label{sec:repair-stop}
+
+The repair ends when one of the following holds.
+
+\begin{enumerate}[nosep]
+  \item The check finds no violation. The verdict is \texttt{REPAIRED}.
+  \item The time limit is reached. The limit is \opt{repair.time\_ratio} (8) times the time of the first AC solution, and at least \opt{repair.min\_time} (2~s). This keeps the total cost in the range of one AC-OPF.
+  \item Six rounds in a row did not reduce $\Phi$ by 30 percent, or the step bounds fell below $1/32$ of their start values.
+  \item \opt{repair.max\_rounds} (12) rounds were made.
+  \item The linear program returned zero changes at the largest tightening, or no solver returned a valid point.
+\end{enumerate}
+
+In cases 2 to 5 the result holds the best dispatch found and the remaining violations.
+
+\subsection{Relaxation}\label{sec:relax}
+
+When violations remain, \GRIT{} reports the smallest relaxation that would make the best dispatch acceptable: the largest remaining voltage excess in pu (\texttt{repair.need\_v}), the largest remaining branch overload in percent of the rating (\texttt{repair.need\_flow\_pct}), and whether a generator limit remains violated (\texttt{repair.need\_other}).
+
+The user can accept a relaxation in advance with \opt{relax.v} and \opt{relax.flow\_pct}. If all remaining violations are inside these values and no generator limit is violated, the verdict is \texttt{RELAXED} and the result holds the repaired dispatch with its remaining violations listed. A relaxed result is never called feasible. Without accepted relaxation the verdict stays \texttt{VIOLATED} and the result keeps the original check together with the relaxation that would be needed.
+
+A common use is a short-term rating. Set \opt{limits.rate} to \texttt{'B'} to check against \texttt{RATE\_B}, or accept one or two percent of overload with \opt{relax.flow\_pct}.
+
+\subsection{What the repair is not}
+
+The repair finds a dispatch that satisfies the limits and stays near the DC dispatch. It does not minimize the generation cost. It has no shunt, tap-changer or load-shedding controls. Wide-area low voltage that needs reactive compensation is reported with its remaining excess and is not repaired (see the case \texttt{case2383wp} in Section~\ref{sec:largecases}).
+
+% ====================================================================
+\section{Marginal Loss Factors}\label{sec:price}
+
+The total losses are $L=\sum_g P^{\mathrm{AC}}_g - \sum_i P^D_i$. Inject one more unit of active power at bus $i$ and let the generators absorb the change through the loss variable. The marginal loss factor of bus $i$ is
+\[
+\mathrm{ITL}_i = \frac{\partial L}{\partial P^{\mathrm{inj}}_i} = 1 + \frac{\partial s}{\partial P^{\mathrm{inj}}_i},
+\]
+with $\partial s/\partial P^{\mathrm{inj}}_i$ from Section~\ref{sec:sens}. An injection distributed like the shares $a_i$ replaces generation one to one and does not change the losses. Hence $\sum_i a_i\,\mathrm{ITL}_i=0$, which the regression tests verify.
+
+When DC prices are available, \GRIT{} reports the loss price component $-\lambda\,\mathrm{ITL}_i$ with the reference price $\lambda=\sum_i a_i\,\mathrm{LMP}^{\mathrm{DC}}_i$. For every branch with a binding DC limit it also compares the AC sensitivity of the branch flow to bus injections with the DC sensitivity, and reports the largest difference.
+
+\begin{warnbox}
+These values hold for the fixed dispatch. They are not the prices of an AC-OPF, which also change the dispatch. They show where the DC prices ignore losses, and how far the DC sensitivities of congested branches are from the AC ones.
+\end{warnbox}
+
+% ====================================================================
+\section{Computing Cost}\label{sec:cost}
+
+The dominant operation is the sparse factorization of a Jacobian matrix of size about $2n_b$.
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}lp{10.5cm}@{}}
+\toprule
+\textbf{Stage} & \textbf{Factorizations} \\
+\midrule
+AC solution & 3 to 6 without reactive limit switching. Up to about 25 on large cases with several rounds of switching. \\
+Check & None. \\
+Existence check & One. In the mode \texttt{exact} also $2n_b$ solves. \\
+Loss factors & One, and one solve per binding DC limit. \\
+Repair, per round & One for the sensitivities, two to four for the AC solution, and one linear program. \\
+N-1, per outage & Three to six. \\
+\bottomrule
+\end{tabular}
+\caption{Factorizations per stage.}
+\end{table}
+
+An AC-OPF by an interior point method needs 20 to 60 iterations. Each iteration factorizes a matrix that is larger and denser than the power flow Jacobian, and evaluates second derivatives. As a measured example, the check of \texttt{case3120sp} used 19 factorizations and 0.25~s in total, and the AC-OPF of MATPOWER for the same case took 2.18~s on the same machine (Section~\ref{sec:largecases}). A repair of many rounds on a large system can reach the time of an AC-OPF, which is why the repair has a time limit.
+
+% ====================================================================
+\section{Assumptions and Limitations}\label{sec:limitations}
+
+\begin{enumerate}[nosep]
+  \item \textbf{One island.} The in-service network is connected and has one reference bus.
+  \item \textbf{Steady state.} \GRIT{} checks one operating point. It does not study dynamics or voltage stability margins.
+  \item \textbf{Fixed topology and taps.} Transformer taps, phase shifters and shunts are data. They are not controls.
+  \item \textbf{Repair controls.} Generator active power and voltage set points only (Section~\ref{sec:repair}).
+  \item \textbf{No cost minimization.} The repair minimizes the change, not the cost.
+  \item \textbf{\texttt{NO\_SOLUTION} is not a proof.} See Section~\ref{sec:fallback}.
+  \item \textbf{Reactive limit states.} The switching rules of Section~\ref{sec:qlim} find one consistent state. Other consistent states can exist. Buses whose switching was stopped are counted in the result.
+  \item \textbf{Existence check.} Floating-point arithmetic. The constant is an estimate above 1500 buses.
+  \item \textbf{Loss factors.} They hold at the fixed dispatch.
+  \item \textbf{DC lines} of a MATPOWER case are not modeled. A warning is issued.
+\end{enumerate}
+
+% ====================================================================
+\part{Worked Examples}\label{part:examples}
+% ====================================================================
+
+\clearpage
+All numbers of this part were computed with \GRIT{} 1.0.0, MATLAB R2026a and MATPOWER 8.1 on one desktop computer. Times vary between runs and machines. The DC-OPF of MATPOWER can return different optimal dispatches with different solvers, so the number of violations of a case can differ on another installation.
+
+\section{case30: One Overloaded Branch}\label{sec:ex30}
+
+\subsection{Check}
+
+\begin{lstlisting}
+R = GRIT_Run('case30');
+\end{lstlisting}
+
+The DC-OPF has a cost of 565.21~\$/h. Newton's method converges from the DC point in three iterations (largest mismatch $3.6\times10^{-1}$, $1.5\times10^{-2}$, $2.7\times10^{-5}$~pu before each step, then below $10^{-8}$). No generator reaches a reactive limit.
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Quantity} & \textbf{Value} \\
+\midrule
+Losses & 2.92~MW (estimate from DC flows: 2.32~MW) \\
+Voltage range & 0.9585 to 1.0000~pu \\
+Largest difference of AC and DC active flow & 0.96~MW \\
+Largest branch loading & 107.7 percent \\
+Cost of the AC dispatch (DC dispatch plus losses) & 576.32~\$/h \\
+Existence check & $\eta=3.0\times10^{-11}$, $\omega=4171$, $h=1.3\times10^{-7}$ \\
+Time of the check & 0.018~s \\
+\bottomrule
+\end{tabular}
+\caption{\texttt{case30}: result of the check.}
+\end{table}
+
+One limit is violated.
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+\textbf{Kind} & \textbf{Element} & \textbf{Value} & \textbf{Limit} & \textbf{Excess} \\
+\midrule
+Branch overload & branch 10 (bus 6 to bus 8) & 34.45~MVA & 32.00~MVA & 2.45~MVA \\
+\bottomrule
+\end{tabular}
+\caption{\texttt{case30}: violation.}
+\end{table}
+
+The active flows of the DC and AC solutions agree within 1~MW. The overload comes from the reactive power on the branch, which the DC model does not have (fact~3 of Section~\ref{sec:physics}).
+
+The loss sharing by headroom gives each generator between 0.28 and 0.71~MW of the losses.
+
+\subsection{Repair}
+
+\begin{lstlisting}
+R = GRIT_Run('case30', 'repair.enable', true, 'compare.opf', true);
+\end{lstlisting}
+
+The repair succeeds in three rounds.
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}rrrl@{}}
+\toprule
+\textbf{Round} & \textbf{Violations after} & \textbf{MW moved so far} & \textbf{Step} \\
+\midrule
+1 & 2 & 16.00 & kept (total violation decreased) \\
+2 & 2 & 24.11 & kept \\
+3 & 0 & 24.11 & kept \\
+\bottomrule
+\end{tabular}
+\caption{\texttt{case30}: rounds of the repair.}
+\end{table}
+
+In round~1 the linear program could not satisfy all entered limits inside the step bounds (largest $u_c = 0.011$~pu). Rounds 2 and 3 satisfied the linear model, and round~3 also satisfied the AC check.
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+\textbf{Generator} & \textbf{Bus} & \textbf{DC dispatch (MW)} & \textbf{After repair (MW)} & \textbf{Change (MW)} \\
+\midrule
+1 & 1 & 44.73 & 36.62 & $-8.11$ \\
+2 & 2 & 58.26 & 42.26 & $-16.00$ \\
+3 & 22 & 22.31 & 27.31 & $+5.00$ \\
+4 & 27 & 32.33 & 43.33 & $+11.00$ \\
+5 & 23 & 15.78 & 21.39 & $+5.61$ \\
+6 & 13 & 15.78 & 18.28 & $+2.50$ \\
+\bottomrule
+\end{tabular}
+\caption{\texttt{case30}: active power before and after the repair (before loss sharing).}
+\end{table}
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+\textbf{Bus} & \textbf{Set point before (pu)} & \textbf{After (pu)} & \textbf{Change (pu)} \\
+\midrule
+1 & 1.0000 & 0.9600 & $-0.0400$ \\
+2 & 1.0000 & 0.9776 & $-0.0224$ \\
+13 & 1.0000 & 1.0400 & $+0.0400$ \\
+22 & 1.0000 & 0.9941 & $-0.0059$ \\
+23 & 1.0000 & 1.0229 & $+0.0229$ \\
+27 & 1.0000 & 1.0432 & $+0.0432$ \\
+\bottomrule
+\end{tabular}
+\caption{\texttt{case30}: voltage set points before and after the repair.}
+\end{table}
+
+After the repair the largest loading is 99.8 percent, the voltages lie between 0.9529 and 1.0432~pu, and the losses are 2.65~MW. The cost rises by 8.37~\$/h to 584.69~\$/h. For comparison, the AC-OPF of MATPOWER has a cost of 576.89~\$/h. The repaired dispatch costs 7.80~\$/h more than the AC optimum, because the repair minimizes the change and not the cost. The whole run took 0.10~s. The AC-OPF took 0.43~s.
+
+% ====================================================================
+\section{case118: Feasible Dispatch, Batch Runs}\label{sec:ex118}
+
+\subsection{Check}
+
+\begin{lstlisting}
+R = GRIT_Run('case118');
+\end{lstlisting}
+
+The verdict is \texttt{FEASIBLE}. The iteration needs six factorizations. Seven generator buses reach a reactive limit and release their set point. The losses are 126.36~MW. The largest difference of AC and DC active flow is 16.90~MW. The voltages lie between 0.9430 and 1.0500~pu. The case has no branch ratings. The check took 0.025~s.
+
+\subsection{N-1}
+
+\begin{lstlisting}
+B = GRIT_Batch('case118', 'n-1', []);
+\end{lstlisting}
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Result} & \textbf{Outages} \\
+\midrule
+\texttt{FEASIBLE} & 164 \\
+\texttt{VIOLATED} & 13 \\
+\texttt{ISLAND} (the outage splits the network) & 9 \\
+\midrule
+Total & 186 \\
+Time & 0.49~s \\
+\bottomrule
+\end{tabular}
+\caption{\texttt{case118}: N-1 batch with the dispatch of the intact network.}
+\end{table}
+
+The outage of branch 51 gives the most violations (6, lowest voltage 0.9286~pu). Among the five outages with the most violations, the lowest voltage is 0.9139~pu (branch 29).
+
+\subsection{Load levels}
+
+\begin{lstlisting}
+B = GRIT_Batch('case118', 'load', 0.6:0.2:1.6);
+\end{lstlisting}
+
+\begin{table}[H]\centering
+\begin{tabular}{@{}rlrr@{}}
+\toprule
+\textbf{Load factor} & \textbf{Verdict} & \textbf{Violations} & \textbf{Lowest voltage (pu)} \\
+\midrule
+0.6 & \texttt{FEASIBLE} & 0 & 0.9520 \\
+0.8 & \texttt{FEASIBLE} & 0 & 0.9508 \\
+1.0 & \texttt{FEASIBLE} & 0 & 0.9430 \\
+1.2 & \texttt{FEASIBLE} & 0 & 0.9407 \\
+1.4 & \texttt{VIOLATED} & 1 & 0.9352 \\
+1.6 & \texttt{VIOLATED} & 5 & 0.9296 \\
+\bottomrule
+\end{tabular}
+\caption{\texttt{case118}: six load levels, each with its own DC-OPF.}
+\end{table}
+
+\subsection{A dispatch without an AC solution}
+
+\begin{lstlisting}
+R = GRIT_Run('case118', 'dispatch.source', 'case', 'dispatch.load_scale', 3.2);
+\end{lstlisting}
+
+The dispatch stored in the case is kept and the load is multiplied by 3.2. The verdict is \texttt{NO\_SOLUTION}. The continuation of Section~\ref{sec:fallback} finds a solution up to 64.1 percent of the injections. The DC solution has a largest angle difference of $142^\circ$ over a branch, and ten branches above $60^\circ$.
+
+% ====================================================================
+\section{case300: Repair with a Remaining Violation}\label{sec:ex300}
+
+\begin{lstlisting}
+R = GRIT_Run('case300', 'repair.enable', true);
+\end{lstlisting}
+
+The check finds 13 voltage violations: nine buses below 0.94~pu (largest excess 0.0210~pu at bus 9033) and four buses above 1.06~pu (largest excess 0.0135~pu at bus 149). The losses are 403.29~MW.
+
+The repair removes 12 of the 13 violations in eight rounds and then stops because the total violation no longer decreases. One bus remains 0.0014~pu below its limit. The result reports:
+
+\begin{lstlisting}[numbers=none]
+Repair : 1 of 13 violations remain after 8 rounds.
+         relaxation needed: voltage 0.0014 pu, branch loading 0.00 percent
+\end{lstlisting}
+
+The verdict stays \texttt{VIOLATED}. A user who accepts 0.005~pu runs
+
+\begin{lstlisting}
+R = GRIT_Run('case300', 'repair.enable', true, 'relax.v', 0.005);
+\end{lstlisting}
+
+and obtains the verdict \texttt{RELAXED}. The result then holds the repaired dispatch (voltages between 0.9386 and 1.0600~pu) and lists the one remaining violation of 0.0014~pu.
+
+% ====================================================================
+\section{Large Cases and Time against AC-OPF}\label{sec:largecases}
+
+Table~\ref{tab:timing} lists 14 MATPOWER cases. ``Check'' is \texttt{GRIT\_Run} with default options. ``With repair'' adds \opt{repair.enable}. ``AC-OPF'' is \texttt{runopf} of MATPOWER with default options on the same case. All times are in seconds and exclude the DC-OPF.
+
+\begin{table}[H]\centering\small
+\begin{tabular}{@{}lrlrrlrrr@{}}
+\toprule
+ & & \multicolumn{3}{c}{\textbf{Check}} & \multicolumn{3}{c}{\textbf{With repair}} & \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-8}
+\textbf{Case} & \textbf{Buses} & \textbf{Verdict} & \textbf{Viol.} & \textbf{Time} & \textbf{Verdict} & \textbf{Viol.} & \textbf{Time} & \textbf{AC-OPF} \\
+\midrule
+case9 & 9 & FEASIBLE & 0 & 0.01 & & & & 0.26 \\
+case14 & 14 & VIOLATED & 4 & 0.02 & REPAIRED & 0 & 0.03 & 0.22 \\
+case30 & 30 & VIOLATED & 1 & 0.01 & REPAIRED & 0 & 0.09 & 0.20 \\
+case39 & 39 & VIOLATED & 1 & 0.02 & REPAIRED & 0 & 0.04 & 0.14 \\
+case57 & 57 & VIOLATED & 2 & 0.02 & REPAIRED & 0 & 0.03 & 0.10 \\
+case118 & 118 & FEASIBLE & 0 & 0.02 & & & & 0.09 \\
+case300 & 300 & VIOLATED & 13 & 0.02 & VIOLATED & 1 & 0.19 & 0.14 \\
+case1354pegase & 1354 & VIOLATED & 16 & 0.17 & REPAIRED & 0 & 0.93 & 1.04 \\
+case\_ACTIVSg2000 & 2000 & FEASIBLE & 0 & 0.17 & & & & 1.52 \\
+case2383wp & 2383 & VIOLATED & 218 & 0.25 & VIOLATED & 37 & 3.15 & 1.48 \\
+case3120sp & 3120 & VIOLATED & 9 & 0.25 & REPAIRED & 0 & 1.26 & 2.18 \\
+case9241pegase & 9241 & VIOLATED & 178 & 0.83 & VIOLATED & 19 & 6.15 & 7.59 \\
+case\_ACTIVSg10k & 10000 & VIOLATED & 11 & 0.94 & REPAIRED & 0 & 3.04 & 13.45$^{*}$ \\
+case13659pegase & 13659 & NO\_SOLUTION & & 1.64 & & & & 1.36$^{*}$ \\
+\bottomrule
+\end{tabular}
+\caption{Verdicts and times on 14 cases. $^{*}$The AC-OPF did not converge. The time is the time until it stopped.}\label{tab:timing}
+\end{table}
+
+\textbf{Check.} For the cases of 1354 buses and more, the check takes between 7 and 17 percent of the AC-OPF time.
+
+\textbf{Repair.} The repair succeeds on seven of the ten cases with violations. On three cases violations remain:
+
+\begin{itemize}[nosep]
+  \item \texttt{case300}: one bus, 0.0014~pu (Section~\ref{sec:ex300}).
+  \item \texttt{case9241pegase}: 19 of 178 violations remain when the time limit is reached. The relaxation needed is 0.0083~pu of voltage and 3.2 percent of branch loading.
+  \item \texttt{case2383wp}: 37 of 218 violations remain. The relaxation needed is 0.040~pu of voltage. This case has low voltage over a wide area at winter peak load. Generator set points and redispatch cannot remove it, and the repair is not the right tool. Here the run with repair takes 2.1 times as long as the AC-OPF.
+\end{itemize}
+
+\textbf{Loss sharing.} \texttt{case\_ACTIVSg2000} has losses of 1744~MW. The unit at the reference bus has a capacity of 1354~MW, which the DC dispatch uses in full. With the mode \texttt{single} the AC equations have no solution. With the default mode the dispatch is feasible.
+
+\textbf{No solution.} For \texttt{case13659pegase} the DC-OPF dispatch has no AC solution that \GRIT{} can find. The DC solution has 37 branches with an angle difference above $60^\circ$, all of them without a rating in the case data. The AC-OPF of MATPOWER does not converge on this case either.
+
+% ====================================================================
+\part{Appendices}\label{part:appendices}
+% ====================================================================
+
+\clearpage
+\section{Configuration Reference}\label{sec:configref}
+
+\texttt{GRIT\_Config} returns all options with their defaults. Options are set by dotted name in \texttt{GRIT\_Run} and \texttt{GRIT\_Batch}.
+
+\begin{longtable}{@{}p{4.2cm}p{2.0cm}p{8.6cm}@{}}
+\toprule
+\textbf{Option} & \textbf{Default} & \textbf{Meaning} \\
+\midrule
+\endhead
+\opt{dispatch.source} & \texttt{'dcopf'} & \texttt{'dcopf'}: \GRIT{} runs the DC-OPF. \texttt{'case'}: the \texttt{PG} values of the case are the dispatch. \\
+\opt{dispatch.load\_scale} & 1.0 & Factor on all loads. \\
+\opt{slack.mode} & \texttt{'headroom'} & Sharing of losses: \texttt{'headroom'}, \texttt{'pmax'} or \texttt{'single'}. \\
+\opt{newton.tol} & $10^{-8}$ & Tolerance on the largest mismatch (pu). \\
+\opt{newton.max\_it} & 40 & Limit on Newton iterations of one solution. \\
+\opt{newton.enforce\_q} & true & Generators at a reactive limit release their set point. \\
+\opt{newton.q\_tol} & $10^{-6}$ & Tolerance on reactive limits (pu). \\
+\opt{newton.v\_tol} & $10^{-6}$ & Tolerance of the set-point comparison (pu). \\
+\opt{newton.q\_rounds} & 20 & Limit on rounds of reactive limit switching. \\
+\opt{newton.vm\_init} & \texttt{'auto'} & Magnitude at load buses in the start point: \texttt{'flat'}, \texttt{'case'} or \texttt{'auto'}. \\
+\opt{newton.step\_min} & $1/64$ & Smallest step factor. \\
+\opt{newton.continuation} & true & Continuation when Newton's method fails. \\
+\opt{newton.cont\_max\_fact} & 60 & Limit on factorizations in the continuation. \\
+\opt{limits.v\_min}, \opt{limits.v\_max} & \texttt{[]} & Voltage limits for all buses (pu). Empty keeps the case values. \\
+\opt{limits.flow} & \texttt{'S'} & Branch limit on \texttt{'S'} (MVA), \texttt{'P'} (MW) or \texttt{'I'} (current). \\
+\opt{limits.rate} & \texttt{'A'} & Rating column \texttt{'A'}, \texttt{'B'} or \texttt{'C'}. \\
+\opt{limits.rate\_scale} & 1.0 & Factor on all ratings. \\
+\opt{limits.angle} & false & Check angle difference limits. \\
+\opt{tol.v}, \opt{tol.flow}, \opt{tol.q}, \opt{tol.p}, \opt{tol.angle} & see Table~\ref{tab:limits} & Tolerances of the check. \\
+\opt{q\_margin} & 0 & Relative uncertainty of reactive load. \\
+\opt{cert.mode} & \texttt{'auto'} & Existence check: \texttt{'auto'}, \texttt{'exact'}, \texttt{'estimate'} or \texttt{'off'}. \\
+\opt{cert.exact\_max\_bus} & 1500 & \texttt{'auto'} uses \texttt{'exact'} up to this size. \\
+\opt{cert.block} & 1000 & Right-hand sides solved together in the mode \texttt{'exact'}. \\
+\opt{repair.enable} & false & Run the repair when limits are violated. \\
+\opt{repair.controls} & \texttt{'pv'} & \texttt{'pv'}: active power and set points. \texttt{'p'}: active power only. \\
+\opt{repair.max\_rounds} & 12 & Limit on rounds. \\
+\opt{repair.ramp\_pct} & 1.0 & Largest total change of a unit, fraction of \texttt{PMAX}. \\
+\opt{repair.dv\_max} & 0.05 & Largest total change of a set point (pu). \\
+\opt{repair.step\_p} & 0.10 & Step bound of active power per round, fraction of \texttt{PMAX}. \\
+\opt{repair.step\_v} & 0.02 & Step bound of a set point per round (pu). \\
+\opt{repair.screen} & 0.05 & Screening distance. Voltages enter within one fifth of it (pu), branches within three times it (fraction of the rating). \\
+\opt{repair.back\_off} & $10^{-3}$ & Start value of the tightening $\delta_c$. \\
+\opt{repair.time\_ratio} & 8 & Time limit as a multiple of the AC solution time. \\
+\opt{repair.min\_time} & 2 & Smallest time limit (s). \\
+\opt{repair.w\_v} & 0.1 & Price of a set-point change of 0.01~pu, in units of 1~MW moved. \\
+\opt{relax.v} & 0 & Accepted voltage violation after repair (pu). \\
+\opt{relax.flow\_pct} & 0 & Accepted branch overload after repair (percent). \\
+\opt{price.enable} & true & Compute the loss factors. \\
+\opt{compare.pf}, \opt{compare.opf} & false & Run MATPOWER's AC power flow or AC-OPF for comparison. \\
+\opt{verbose} & 1 & 0: silent. 1: summary. \\
+\bottomrule
+\end{longtable}
+
+% ====================================================================
+\section{Tests}\label{sec:tests}
+
+\texttt{GRIT\_TestSuite} runs three test files. \texttt{GRIT\_TestSuite(true)} adds the time comparison with AC-OPF on two large cases.
+
+\begin{table}[H]\centering\small
+\begin{tabular}{@{}lrp{9.5cm}@{}}
+\toprule
+\textbf{File} & \textbf{Tests} & \textbf{Content} \\
+\midrule
+\texttt{GRIT\_TestRegression} & 53 & Agreement of branch flows with MATPOWER's AC power flow on seven cases (losses at the reference bus, no reactive limits). Power balance. States of generator reactive limits. Existence check, exact against estimate. Sensitivities against finite differences. Loss factor identity. Repair on four cases. Relaxation. No solution. Binding DC limits. Batch modes, with N-1 voltages against MATPOWER. Report. Time against AC-OPF. \\
+\texttt{GRIT\_TestRobustness} & 39 & 28 wrong inputs that must be refused with a readable message. 10 unusual inputs that must run. 80 random scenarios (random loads and outages) that must end with a verdict. \\
+\texttt{GRIT\_TestGUISmoke} & 17 & The interface with a hidden window: run, plots, menus, batch, report, advanced settings, messages for wrong entries. \\
+\bottomrule
+\end{tabular}
+\caption{Test files. All tests pass with MATLAB R2026a and MATPOWER 8.1.}
+\end{table}
+
+% ====================================================================
+\section{Frequently Asked Questions}\label{sec:faq}
+
+\textbf{Why not run an AC-OPF?} An AC-OPF gives a new dispatch. It does not say whether a given DC dispatch is realizable, where it fails, or how far it is from a realizable one. A check costs much less than an AC-OPF, which matters for many scenarios (N-1, time periods). When the optimal AC dispatch is the goal, run an AC-OPF.
+
+\textbf{The verdict is \texttt{VIOLATED}. Is the tool wrong?} No. The verdict says that the DC dispatch violates limits in the AC network. The table names each violated limit.
+
+\textbf{The number of violations differs from a colleague's run.} The DC-OPF can have several optimal dispatches. Different LP solvers return different ones. Use \opt{dispatch.source} = \texttt{'case'} with the same stored dispatch to compare runs.
+
+\textbf{My results differ from MATPOWER's power flow.} MATPOWER assigns all losses to the reference bus. \GRIT{} shares them by default. Set \opt{slack.mode} to \texttt{'single'} and \opt{newton.enforce\_q} to false to reproduce a classical power flow.
+
+\textbf{The repair moved many set points for a small overload.} Set-point changes are cheap in the objective \eqref{eq:lp}. Raise \opt{repair.w\_v}, or set \opt{repair.controls} to \texttt{'p'} to move active power only.
+
+\textbf{The repair did not succeed.} Read the relaxation that is still needed. A small value (a few thousandths of a pu, one or two percent of loading) can often be accepted with \opt{relax.v} and \opt{relax.flow\_pct}. A large voltage value over many buses points to a lack of reactive support, which the repair cannot provide.
+
+\textbf{What does \texttt{NO\_SOLUTION} tell me?} That Newton's method from two start points and a continuation found no AC solution. Look at \texttt{R.newton.reach} and at \texttt{R.diagnosis.wide\_branches}. Unrated branches with large DC angle differences are a common cause.
+
+\textbf{Is the existence check a proof?} It is the Newton-Kantorovich test evaluated in floating-point arithmetic. It is strong numerical evidence that an exact solution exists within the stated distance. It is not a computer-assisted proof with rounding control.
+
+\end{document}

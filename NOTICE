@@ -1,0 +1,38 @@
+GRIT(TM) - Grid Realizability Inspection Tool
+A tool of the GriRes(TM) Suite (Grid Resilience Suite)
+=====================================================
+
+Copyright (c) 2026 Francis Yunhe Hou
+
+GRIT(TM) and GriRes(TM) are trademarks of Francis Yunhe Hou.
+
+DUAL LICENSING
+==============
+
+This software is available under two licensing options:
+
+1. OPEN-SOURCE LICENSE (GPL-3.0-or-later)
+   Free for any use, including academic, educational, and commercial
+   use, under the terms of the GNU General Public License, Version 3
+   or later. See the LICENSE file.
+
+2. COMMERCIAL LICENSE
+   For use cases where the GPL copyleft obligations cannot be met
+   (distribution as part of closed-source software, or distribution
+   without the corresponding source code). Contact:
+   fyhou@vt.edu, yunhe.hou@gmail.com
+
+THIRD-PARTY SOFTWARE
+====================
+
+GRIT requires MATPOWER (BSD 3-Clause License), https://matpower.org.
+MATPOWER is not distributed with GRIT.
+
+AI-ASSISTED DEVELOPMENT NOTICE
+==============================
+
+Portions of this software were developed with the assistance of
+Claude, an AI system made by Anthropic. All AI-generated code has
+been reviewed, tested, and validated by the author. The author
+assumes full responsibility for the correctness and quality of the
+final code.
